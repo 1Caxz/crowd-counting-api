@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from app.core.database import Base
+from app.core.database import Base, DATABASE_URL
 from app.models import user_model, post_model  # IMPORT semua model
 from app.core.config import settings
 
@@ -29,13 +29,6 @@ target_metadata = Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
-# Load DB URL dari env
-def get_url():
-    return (
-        f"mysql+pymysql://{settings.DB_USER}:{settings.DB_PASSWORD}"
-        f"@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
-    )
-
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
@@ -49,7 +42,7 @@ def run_migrations_offline() -> None:
 
     """
     # url = config.get_main_option("sqlalchemy.url", get_url())
-    url = get_url()
+    url = DATABASE_URL
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -73,7 +66,7 @@ def run_migrations_online() -> None:
     #     prefix="sqlalchemy.",
     #     poolclass=pool.NullPool,
     # )
-    connectable = create_engine(get_url())
+    connectable = create_engine(DATABASE_URL)
     with connectable.connect() as connection:
         context.configure(
             connection=connection, target_metadata=target_metadata
