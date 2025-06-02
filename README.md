@@ -15,4 +15,6 @@ sqlalchemy
 pymysql
 python-dotenv
 pydantic
+python-jose
+passlib[bcrypt]
 ```
