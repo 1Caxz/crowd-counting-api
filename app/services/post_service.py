@@ -1,30 +1,33 @@
 from sqlalchemy.orm import Session
 from app.models.post_model import Post
 from app.schemas.post_schema import PostCreate, PostUpdate
-from app.utils.error_handler import safe_commit, handle_not_found
+from app.utils.error_helper import safe_commit, handle_not_found
 
-def create_post(db: Session, post: PostCreate):
-    db_post = Post(**post.model_dump())
-    db.add(db_post)
-    safe_commit(db, "Membuat post")
-    db.refresh(db_post)
-    return db_post
+def create_post(db: Session, data: PostCreate):
+    query = Post(**data.model_dump())
+    db.add(query)
+    safe_commit(db, "Post created.")
+    db.refresh(query)
+    return query
 
-def update_post(db: Session, post_id: int, new_data: PostUpdate):
-    db_post = db.query(Post).filter(Post.id == post_id).first()
-    handle_not_found(db_post, "Post tidak ditemukan")
+def update_post(db: Session, id: int, data: PostUpdate):
+    query = db.query(Post).filter(Post.id == id).first()
+    handle_not_found(query, "Post not found.")
 
-    for attr, value in new_data.model_dump().items():
-        setattr(db_post, attr, value)
+    for attr, value in data.model_dump().items():
+        setattr(query, attr, value)
 
-    safe_commit(db, "Update post")
-    db.refresh(db_post)
-    return db_post
+    safe_commit(db, "Post updated.")
+    db.refresh(query)
+    return query
 
-def delete_post(db: Session, post_id: int):
-    db_post = db.query(Post).filter(Post.id == post_id).first()
-    handle_not_found(db_post, "Post tidak ditemukan")
+def delete_post(db: Session, id: int):
+    query = db.query(Post).filter(Post.id == id).first()
+    handle_not_found(query, "Post not found.")
     
-    db.delete(db_post)
-    safe_commit(db, "Menghapus post")
-    return {"message": "Post berhasil dihapus"}
+    db.delete(query)
+    safe_commit(db, "Post deleted.")
+    return {"message": "Post deleted."}
+
+def get_posts(db: Session, limit=10):
+    return db.query(Post).limit(limit).all()

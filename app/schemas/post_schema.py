@@ -9,11 +9,11 @@ class PostCreate(BaseModel):
 class PostUpdate(BaseModel):
     title: Optional[str]
 
-class PostDelete(BaseModel):
+class PostResponse(BaseModel):
     id: int
-
-class PostResponse(PostCreate):
-    id: int
+    user_id: int
+    title: str
+    image: str
     
     class Config:
         orm_mode = True

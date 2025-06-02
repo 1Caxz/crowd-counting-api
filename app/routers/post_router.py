@@ -13,9 +13,17 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/", response_model=PostResponse)
-def create(post: PostCreate, db: Session = Depends(get_db)):
-    return post_service.create_post(db, post)
+@router.post("/create", response_model=PostResponse)
+def create(data: PostCreate, db: Session = Depends(get_db)):
+    return post_service.create_post(db, data)
+
+@router.post("/update/{id}", response_model=PostResponse)
+def create(id: int, data: PostCreate, db: Session = Depends(get_db)):
+    return post_service.update_post(db, id, data)
+
+@router.post("/delete/{id}", response_model=PostResponse)
+def create(id: int, db: Session = Depends(get_db)):
+    return post_service.delete_post(db, id)
 
 @router.get("/", response_model=list[PostResponse])
 def read_posts(db: Session = Depends(get_db)):
