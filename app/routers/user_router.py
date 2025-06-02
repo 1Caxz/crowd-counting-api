@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.core.database import SessionLocal
-from app.services import post_service
-from app.schemas.post_schema import PostCreate, PostResponse
+from app.services import user_service
+from app.schemas.user_schema import UserCreate, UserUpdate, UserResponse
 
-router = APIRouter(prefix="/posts", tags=["Posts"])
+router = APIRouter(prefix="/users", tags=["Users"])
+
 
 def get_db():
     db = SessionLocal()
@@ -13,10 +14,22 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/", response_model=PostResponse)
-def create(post: PostCreate, db: Session = Depends(get_db)):
-    return post_service.create_post(db, post)
 
-@router.get("/", response_model=list[PostResponse])
+@router.post("/create", response_model=UserResponse)
+def create(data: UserCreate, db: Session = Depends(get_db)):
+    return user_service.create_user(db, data)
+
+
+@router.post("/update/{id}", response_model=UserResponse)
+def create(id: int, data: UserUpdate, db: Session = Depends(get_db)):
+    return user_service.update_user(db, id, data)
+
+
+@router.post("/delete/{id}")
+def create(id: int, db: Session = Depends(get_db)):
+    return user_service.delete_user(db, id)
+
+
+@router.get("/", response_model=list[UserResponse])
 def read_posts(db: Session = Depends(get_db)):
-    return post_service.get_posts(db)
+    return user_service.get_users(db)
