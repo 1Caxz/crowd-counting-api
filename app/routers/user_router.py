@@ -30,6 +30,6 @@ def create(id: int, db: Session = Depends(get_db)):
     return user_service.delete_user(db, id)
 
 
-@router.get("/", response_model=list[UserResponse])
+@router.get("/list", response_model=list[UserResponse])
 def read_posts(db: Session = Depends(get_db)):
     return user_service.get_users(db)

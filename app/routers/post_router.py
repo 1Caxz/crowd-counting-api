@@ -30,6 +30,6 @@ def create(id: int, db: Session = Depends(get_db)):
     return post_service.delete_post(db, id)
 
 
-@router.get("/", response_model=list[PostResponse])
+@router.get("/list", response_model=list[PostResponse])
 def read_posts(db: Session = Depends(get_db)):
     return post_service.get_posts(db)
