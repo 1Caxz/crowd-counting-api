@@ -17,4 +17,5 @@ python-dotenv
 pydantic
 python-jose
 passlib[bcrypt]
+pyjwt
 ```

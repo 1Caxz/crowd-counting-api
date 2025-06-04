@@ -17,15 +17,15 @@ def get_db():
 
 @router.post("/register", response_model=dict)
 def register(data: RegisterRequest, db: Session = Depends(get_db)):
-    user = auth_service.register_user(db, data)
+    user = auth_service.register(db, data)
     if not user:
-        raise HTTPException(status_code=400, detail="Username already exists")
+        return {"error_message": "Email already exist"}
     return {"message": "User registered successfully"}
 
 
 @router.post("/login", response_model=TokenResponse)
 def login(data: LoginRequest, db: Session = Depends(get_db)):
-    token = auth_service.login_user(db, data)
+    token = auth_service.login(db, data)
     if not token:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+        return {"error_message": "Invalid credentials"}
     return {"access_token": token, "token_type": "bearer"}

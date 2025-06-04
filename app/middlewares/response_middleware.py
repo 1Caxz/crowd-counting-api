@@ -2,6 +2,7 @@ from fastapi import Request, Response
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.types import ASGIApp
+from starlette.concurrency import iterate_in_threadpool
 import json
 import traceback
 
@@ -21,13 +22,24 @@ class ResponseMiddleware(BaseHTTPMiddleware):
                 except Exception:
                     pass
 
+            response_body = [chunk async for chunk in response.body_iterator]
+            response.body_iterator = iterate_in_threadpool(iter(response_body))
             # Parse original response
-            content = await response.body()
+            content = response_body[0].decode()
             try:
                 data = json.loads(content)
             except Exception:
                 data = content.decode()
-
+                
+            # Wrap the error response
+            if data.get('error_message'):
+                wrapped = {
+                    "status": "error",
+                    "message": data['error_message'],
+                    "data": None
+                }
+                return JSONResponse(content=wrapped, status_code=400)
+            
             # Wrap the response
             wrapped = {
                 "status": "success",
