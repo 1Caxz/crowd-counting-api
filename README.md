@@ -18,4 +18,12 @@ pydantic
 python-jose
 passlib[bcrypt]
 pyjwt
+
+# Training Dataset
+torch 
+torchvision 
+numpy 
+opencv-python 
+matplotlib 
+tqdm
 ```
