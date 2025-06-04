@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.core.database import SessionLocal
-from app.schemas.auth_schema import RegisterRequest, LoginRequest, TokenResponse
+from app.schemas.auth_schema import RegisterRequest, LoginRequest
 from app.services import auth_service
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -15,7 +15,7 @@ def get_db():
         db.close()
 
 
-@router.post("/register", response_model=dict)
+@router.post("/register")
 def register(data: RegisterRequest, db: Session = Depends(get_db)):
     user = auth_service.register(db, data)
     if not user:
@@ -23,7 +23,7 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
     return {"message": "User registered successfully"}
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post("/login")
 def login(data: LoginRequest, db: Session = Depends(get_db)):
     token = auth_service.login(db, data)
     if not token:
