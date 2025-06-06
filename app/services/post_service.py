@@ -1,11 +1,17 @@
 from sqlalchemy.orm import Session
 from app.models.post_model import Post
-from app.schemas.post_schema import PostCreate, PostUpdate
+from app.schemas.post_schema import PostUpdate
 from app.utils.error_helper import safe_commit, handle_not_found
 
 
-def create_post(db: Session, data: PostCreate):
-    query = Post(**data.model_dump())
+def create_post(db: Session, title: str, content: str, user_id: int, image_path: str, heatmap_path: str):
+    query = Post(
+        user_id=user_id,
+        title=title,
+        content=content,
+        image=image_path,
+        heatmap=heatmap_path
+    )
     db.add(query)
     safe_commit(db, "Post created.")
     db.refresh(query)

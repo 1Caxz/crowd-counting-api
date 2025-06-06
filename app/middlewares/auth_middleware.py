@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from jwt import DecodeError, ExpiredSignatureError
 from app.utils.jwt_helper import decode_access_token
 
-PUBLIC_PATHS = ["/", "/auth/login", "/auth/register", "/posts/list"]
+PUBLIC_PATHS = ["/auth/login", "/auth/register", "/posts/list"]
 
 class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -24,7 +24,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
         token = auth_header.split(" ")[1]
         try:
             payload = decode_access_token(token)
+            print(payload.get("user_id"))
             request.state.user_id = payload.get("user_id")
+            print(request.state.user_id)
         except ExpiredSignatureError:
             return JSONResponse(status_code=401, content={
                 "status": "error",

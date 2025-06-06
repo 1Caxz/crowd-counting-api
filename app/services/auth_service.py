@@ -24,5 +24,5 @@ def login(db: Session, data: LoginRequest):
     query = db.query(User).filter(User.email == data.email).first()
     if not query or not pwd_context.verify(data.password, query.password):
         return None
-    token = create_access_token(data={"sub": query.email})
+    token = create_access_token(data={"user_id": query.id, "email": query.email})
     return token
