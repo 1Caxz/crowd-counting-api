@@ -15,12 +15,19 @@ sqlalchemy
 pymysql
 python-dotenv
 pydantic
+pydantic-settings
 python-jose
 passlib[bcrypt]
 pyjwt
+alembic
 
 # For data model
+torch
 python-multipart
 pillow
 opencv-python
+matplotlib
+torchvision
+h5py
+scipy
 ```
