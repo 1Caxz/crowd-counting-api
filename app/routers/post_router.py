@@ -5,7 +5,7 @@ from app.core.database import SessionLocal
 from app.services import post_service
 from app.schemas.post_schema import PostCreate, PostResponse
 from app.utils.image_helper import save_image
-from app.utils.predict_helper import predict_count, save_heatmap
+from app.utils.predict_helper import predict_count, save_densitymap, save_heatmap
 
 router = APIRouter(prefix="/posts", tags=["Posts"])
 
@@ -26,9 +26,11 @@ def create(title: str = Form(...), content: str = Form(...), image: UploadFile =
             status_code=401, detail="Unauthorized: user_id not found in request")
 
     image_path, filename = save_image(image)
-    count, heatmap = predict_count(image)
-    heatmap_path = save_heatmap(heatmap, filename)
-    service = post_service.create_post(db, title, content, user_id, image_path, heatmap_path, count)
+    count, map = predict_count(image_path)
+    density = save_densitymap(map, filename)
+    heatmap_path = save_heatmap(density, filename, count)
+    service = post_service.create_post(
+        db, title, content, user_id, image_path, heatmap_path, count)
     return {
         "id": service.id,
         "user_id": service.user_id,

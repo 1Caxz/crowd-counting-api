@@ -4,13 +4,14 @@ from app.schemas.post_schema import PostUpdate
 from app.utils.error_helper import safe_commit, handle_not_found
 
 
-def create_post(db: Session, title: str, content: str, user_id: int, image_path: str, heatmap_path: str):
+def create_post(db: Session, title: str, content: str, user_id: int, image_path: str, heatmap_path: str, count: int):
     query = Post(
         user_id=user_id,
         title=title,
         content=content,
         image=image_path,
-        heatmap=heatmap_path
+        heatmap=heatmap_path,
+        count=count
     )
     db.add(query)
     safe_commit(db, "Post created.")
