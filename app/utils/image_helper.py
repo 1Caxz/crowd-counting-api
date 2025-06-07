@@ -9,28 +9,21 @@ ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-def save_image(image: UploadFile, max_size: int = 500):
-    # Validasi ekstensi
+
+def save_image(image: UploadFile, max_size: int = 1024):
     ext = image.filename.split(".")[-1].lower()
     if ext not in ALLOWED_EXTENSIONS:
-        raise HTTPException(status_code=400, detail="File harus berupa gambar JPG, JPEG, atau PNG")
-
+        raise HTTPException(status_code=400, detail="Image extension invalid.")
     try:
-        img = Image.open(image.file)
+        img = Image.open(image.file).convert("RGB")
+        img.thumbnail((max_size, max_size))  # PENTING: resize eksplisit ke 224x224
 
-        if img.format not in ["JPEG", "PNG"]:
-            raise HTTPException(status_code=400, detail="File gambar tidak valid (harus JPG/PNG)")
-
-        img.thumbnail((max_size, max_size))  # resize dengan menjaga rasio
-
-        # Simpan ke buffer
         buffer = BytesIO()
-        img.save(buffer, format=img.format)
+        img.save(buffer, format="JPEG")  # simpan ulang sebagai JPEG
         buffer.seek(0)
 
-        # Simpan ke disk
         uuid = uuid4()
-        filename = f"{uuid}.{ext}"
+        filename = f"{uuid}.jpg"
         image_path = os.path.join(UPLOAD_DIR, filename)
 
         with open(image_path, "wb") as f:
