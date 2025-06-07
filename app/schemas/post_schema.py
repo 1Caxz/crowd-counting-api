@@ -1,13 +1,9 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class PostCreate(BaseModel):
-    user_id: int
-    title: str
-    image: str
-
 class PostUpdate(BaseModel):
     title: Optional[str]
+    content: Optional[str]
 
 class PostResponse(BaseModel):
     id: int

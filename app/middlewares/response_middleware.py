@@ -32,7 +32,7 @@ class ResponseMiddleware(BaseHTTPMiddleware):
                 data = content.decode()
                 
             # Wrap the error response
-            if data.get('error_message'):
+            if 'error_message' in data:
                 wrapped = {
                     "status": "error",
                     "message": data['error_message'],

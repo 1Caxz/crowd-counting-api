@@ -33,5 +33,7 @@ def delete_user(db: Session, id: int):
     return {"message": "User deleted."}
 
 
-def get_users(db: Session, limit=10):
-    return db.query(User).limit(limit).all()
+def get_users(db: Session, limit=10, page: int = 0):
+    page = page if page > 0 else 1
+    page = (page - 1) * limit
+    return db.query(User).offset(page).limit(limit).all()

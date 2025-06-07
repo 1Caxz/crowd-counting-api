@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from app.core.database import SessionLocal
 from app.services import user_service
@@ -21,15 +21,15 @@ def create(data: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/update/{id}", response_model=UserResponse)
-def create(id: int, data: UserUpdate, db: Session = Depends(get_db)):
+def update(id: int, data: UserUpdate, db: Session = Depends(get_db)):
     return user_service.update_user(db, id, data)
 
 
 @router.post("/delete/{id}")
-def create(id: int, db: Session = Depends(get_db)):
+def delete(id: int, db: Session = Depends(get_db)):
     return user_service.delete_user(db, id)
 
 
 @router.get("/list", response_model=list[UserResponse])
-def read_posts(db: Session = Depends(get_db)):
-    return user_service.get_users(db)
+def read(page: int = Query(0, ge=0), db: Session = Depends(get_db)):
+    return user_service.get_users(db, 10, page)

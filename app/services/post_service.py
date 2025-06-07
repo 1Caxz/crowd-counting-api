@@ -40,5 +40,7 @@ def delete_post(db: Session, id: int):
     return {"message": "Post deleted."}
 
 
-def get_posts(db: Session, limit=10):
-    return db.query(Post).limit(limit).all()
+def get_posts(db: Session, limit=10, page: int = 0):
+    page = page if page > 0 else 1
+    page = (page - 1) * limit
+    return db.query(Post).offset(page).limit(limit).all()
