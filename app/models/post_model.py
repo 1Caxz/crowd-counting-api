@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func
+from sqlalchemy import Column, Integer, Float, String, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 
@@ -10,7 +10,7 @@ class Post(Base):
     content = Column(String(255), nullable=False)
     image = Column(String(255), nullable=False)
     heatmap = Column(String(255), nullable=False)
-    count = Column(Integer, nullable=False)
+    count = Column(Float, nullable=False)
 
     created_at = Column(DateTime, nullable=False, server_default=func.now())
     updated_at = Column(DateTime, nullable=False, server_default=func.now(), server_onupdate=func.now())

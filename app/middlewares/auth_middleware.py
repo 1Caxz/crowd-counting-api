@@ -24,9 +24,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         token = auth_header.split(" ")[1]
         try:
             payload = decode_access_token(token)
-            print(payload.get("user_id"))
             request.state.user_id = payload.get("user_id")
-            print(request.state.user_id)
         except ExpiredSignatureError:
             return JSONResponse(status_code=401, content={
                 "status": "error",
