@@ -1,3 +1,4 @@
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from app.models.post_model import Post
 from app.schemas.post_schema import PostUpdate
@@ -43,4 +44,4 @@ def delete_post(db: Session, id: int):
 def get_posts(db: Session, limit=10, page: int = 0):
     page = page if page > 0 else 1
     page = (page - 1) * limit
-    return db.query(Post).offset(page).limit(limit).all()
+    return db.query(Post).order_by(desc(Post.id)).offset(page).limit(limit).all()
