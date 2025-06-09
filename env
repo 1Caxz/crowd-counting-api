@@ -1,0 +1,11 @@
+# DB CONFIG
+DB_USER=root
+DB_PASSWORD=password
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=crowdcounting
+
+# JWT CONFIG
+SECRET_KEY = "secret_caxz"
+ALGORITHM = "HS256"
+TOKEN_EXPIRE_MINUTES = 1200
