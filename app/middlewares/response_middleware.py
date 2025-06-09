@@ -6,11 +6,17 @@ from starlette.concurrency import iterate_in_threadpool
 import json
 import traceback
 
+EXCLUDE_PATHS = ["/uploads"]
+
 class ResponseMiddleware(BaseHTTPMiddleware):
     def __init__(self, app: ASGIApp):
         super().__init__(app)
 
     async def dispatch(self, request: Request, call_next):
+        # Lewati middleware jika exclude route
+        if any(request.url.path.startswith(p) for p in EXCLUDE_PATHS):
+            return await call_next(request)
+        
         try:
             response: Response = await call_next(request)
             # Bypass if already a JSONResponse with "status"

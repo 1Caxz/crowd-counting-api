@@ -5,8 +5,12 @@ from app.middlewares.response_middleware import ResponseMiddleware
 from app.middlewares.auth_middleware import AuthMiddleware
 from app.exceptions import handlers
 from fastapi.exceptions import RequestValidationError, HTTPException
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="Crowd Counting API")
+
+# Mount folder uploads ke URL /uploads
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # Register Middlewares
 app.add_middleware(AuthMiddleware)

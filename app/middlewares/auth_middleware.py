@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from jwt import DecodeError, ExpiredSignatureError
 from app.utils.jwt_helper import decode_access_token
 
-PUBLIC_PATHS = ["/auth/login", "/auth/register", "/posts/list"]
+PUBLIC_PATHS = ["/auth/login", "/auth/register", "/posts/list", "/uploads"]
 
 class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
