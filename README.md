@@ -4,7 +4,7 @@ API using Phyton, FastAPI and NiceGUI for crowd counting analysis. [SOLID Princi
 - [x] Run uvicorn server `uvicorn app.main:app --reload`
 
 ## Migrations
-- [x] Generate: `alembic revision --autogenerate -m "deskripsi_migrasi"`
+- [x] Generate: `alembic revision --autogenerate -m "initial migration"`
 - [x] Deploy to Database `alembic upgrade head`
 
 ## Requirements
