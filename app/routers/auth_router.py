@@ -25,7 +25,7 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
 
 @router.post("/login")
 def login(data: LoginRequest, db: Session = Depends(get_db)):
-    token = auth_service.login(db, data)
+    token, query = auth_service.login(db, data)
     if not token:
         return {"error_message": "Invalid credentials"}
-    return {"access_token": token, "token_type": "bearer"}
+    return {"name": query.name, "email": query.email, "access_token": token, "token_type": "bearer"}

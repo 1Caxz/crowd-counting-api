@@ -25,4 +25,4 @@ def login(db: Session, data: LoginRequest):
     if not query or not pwd_context.verify(data.password, query.password):
         return None
     token = create_access_token(data={"user_id": query.id, "email": query.email})
-    return token
+    return token, query
